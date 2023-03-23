@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown to HTML Code Block</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism.min.css"
+    integrity="sha512-/mZ1FHPkg6EKcxo0fKXF51ak6Cr2ocgDi5ytaTBjsQZIH/RNs6GF6+oId/vPe3eJB836T36nXwVh/WBl/cWT4w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="//cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js"
+    integrity="sha512-UOoJElONeUNzQbbKQbjldDf9MwOHqxNz49NNJJ1d90yp+X9edsHyJoAs6O4K19CZGaIdjI5ohK+O2y5lBTW6uQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+  <textarea id="markdown" style="width: 100%; height: 200px;">
+  ```javascript
+  // pop(): 배열 맨 뒤 요소 삭제하기
+  var arr = [1, 2, 3];
+  arr.pop();
+  console.log(arr); // [1, 2]
+  
+  // shift(): 배열 맨 앞 요소 삭제하기
+  var arr = [1, 2, 3];
+  arr.shift();
+  console.log(arr); // [2, 3]
+  
+  // splice(): 원하는 위치의 요소 삭제하기
+  var arr = [1, 2, 3, 4];
+  arr.splice(1, 2);
+  console.log(arr); // [1, 4]
+  ```
+  </textarea>
+  <button onclick="convertMarkdown()">변환하기</button>
+  <div id="output"></div>
+
+  <script>
+    function convertMarkdown() {
+      const markdownTextarea = document.getElementById('markdown');
+      const markdownText = markdownTextarea.value;
+      const outputDiv = document.getElementById('output');
+
+      const codeBlockRegex = /(```(\w+)[ \t]*\r?\n)([\s\S]*?)(\r?\n[ \t]*```)/g;
+      const wrappedCode = markdownText.replace(codeBlockRegex, (match, start, language, code, end) => {
+        const escapedCode = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const langClass = `language-${language}`;
+        return `<pre><code class="${langClass}">${escapedCode.trim()}</code></pre>`;
+      });
+
+      outputDiv.innerHTML = wrappedCode;
+
+      Prism.highlightAll();
+    }
+  </script>
+</body>
+
+</html>
